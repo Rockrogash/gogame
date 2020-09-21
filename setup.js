@@ -12,19 +12,21 @@ let groups;
 let group;
 
 let mousePos;
-let turn;
+let player;
 
-const Player = {WHITE:0, BLACK:1};
+const Players = {WHITE:0, BLACK:1};
 const neighbors = [{x: 0, y: -1}, {x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}];
 
 
 function setup() {
+
+
   createCanvas(900,900);
   resolution = 100;
   cols = width/resolution;
   rows = height/resolution;
   grid = create2DArray(cols, rows);
-  turn = Player.WHITE;
+  player = Players.WHITE;
   whiteGroups = [];
   blackGroups = [];
   groups = [whiteGroups, blackGroups];
@@ -33,19 +35,19 @@ function setup() {
 
 
 function draw() {
-  background(151);
+  background(94, 253, 173);
+
   for (var i = 0; i < cols; i++) {
     for (var j = 0; j < rows; j++) {
       let x = i*resolution;
       let y = j*resolution;
-      stroke(0);
+      noStroke();
       if (grid[i][j] == 1) {
-        stroke(255);
-        fill(55);
+        fill(66, 59, 11);
         circle(x+(resolution/2), y+(resolution/2), resolution-10);
       }
       else if (grid[i][j] == 0) {
-        fill(200);
+        fill(231, 238, 236);
         circle(x+(resolution/2), y+(resolution/2), resolution-10);
       }
     }
@@ -65,18 +67,18 @@ function create2DArray(cols, rows){
 
 
 
-function formGroups (group, turn) {
+function formGroups (group, player) {
 
-  groups[turn].push(group);
+  groups[player].push(group);
   let vector = group.stones[group.stones.length - 1];
 
-  for (let i = 0; i < groups[turn].length - 1; i++) {
-    for (let j = 0; j < groups[turn][i].stones.length; j++) {
-      if( (abs(groups[turn][i].stones[j].x - vector.x) == 1) && ((groups[turn][i].stones[j].y - vector.y) == 0 ) || (abs(groups[turn][i].stones[j].y - vector.y) == 1 ) && ((groups[turn][i].stones[j].x - vector.x) == 0 ) ) {
-        let newGroup = new Group(concat(groups[turn][i].stones, group.stones));
-        groups[turn].splice(i, 1);
-        groups[turn].pop();
-        return formGroups (newGroup, turn);
+  for (let i = 0; i < groups[player].length - 1; i++) {
+    for (let j = 0; j < groups[player][i].stones.length; j++) {
+      if( (abs(groups[player][i].stones[j].x - vector.x) == 1) && ((groups[player][i].stones[j].y - vector.y) == 0 ) || (abs(groups[player][i].stones[j].y - vector.y) == 1 ) && ((groups[player][i].stones[j].x - vector.x) == 0 ) ) {
+        let newGroup = new Group(concat(groups[player][i].stones, group.stones));
+        groups[player].splice(i, 1);
+        groups[player].pop();
+        return formGroups (newGroup, player);
       }
     }
   }
@@ -93,27 +95,41 @@ function mouseClicked () {
 
     //Check if field is empty
     if (grid[mousePos.x][mousePos.y] == null) {
-      grid[mousePos.x][mousePos.y] = turn;
+      grid[mousePos.x][mousePos.y] = player;
       let newGroup = new Group([{x: mousePos.x, y : mousePos.y}]);
-      formGroups(newGroup, turn);
+      formGroups(newGroup, player);
+
+      console.log(groups[player][groups[player].length - 1]);
+
+
 
 
       for (var i = 0; i < whiteGroups.length; i++) {
-        whiteGroups[i].calcFreedoms();
-        console.log("white group " + (i+1) + ": " + whiteGroups[i].freedoms.length + " freedoms");
+        whiteGroups[i].calcLiberties();
+        //console.log("white group " + (i+1) + ": " + whiteGroups[i].liberties.length + " liberties");
       }
 
       for (var i = 0; i < blackGroups.length; i++) {
-        blackGroups[i].calcFreedoms();
-        console.log("black group " + (i+1) + ": " + blackGroups[i].freedoms.length + " freedoms");
+        blackGroups[i].calcLiberties();
+        //console.log("black group " + (i+1) + ": " + blackGroups[i].liberties.length + " liberties");
       }
 
-      //Other players' turn
-      turn = abs(turn - 1);
+
+      // if (validMove() {
+      //
+      // }
+      //Other players' player
+      player = switchPlayer(player);
     }
   }
 }
 
+
+
+
+function switchPlayer (player) {
+  return abs(player - 1);
+}
 
 
 function inBounds (i, j, stone) {
