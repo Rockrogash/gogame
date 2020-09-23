@@ -1,5 +1,3 @@
-
-
 let grid;
 let resolution;
 let cols;
@@ -43,10 +41,11 @@ function draw() {
       let y = j*resolution;
       noStroke();
       if (grid[i][j] == 1) {
-        fill(66, 59, 11);
+        fill(31, 26, 56);
         circle(x+(resolution/2), y+(resolution/2), resolution-10);
       }
       else if (grid[i][j] == 0) {
+        stroke(31, 26, 56);
         fill(231, 238, 236);
         circle(x+(resolution/2), y+(resolution/2), resolution-10);
       }
