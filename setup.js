@@ -7,6 +7,7 @@ let whiteGroups;
 let blackGroups;
 
 let groups;
+let groupsTemp
 let group;
 
 let mousePos;
@@ -42,12 +43,12 @@ function draw() {
       noStroke();
       if (grid[i][j] == 1) {
         fill(31, 26, 56);
-        circle(x+(resolution/2), y+(resolution/2), resolution-10);
+        circle(x+(resolution/2), y+(resolution/2), resolution*0.9);
       }
       else if (grid[i][j] == 0) {
         stroke(31, 26, 56);
         fill(231, 238, 236);
-        circle(x+(resolution/2), y+(resolution/2), resolution-10);
+        circle(x+(resolution/2), y+(resolution/2), resolution*0.9);
       }
     }
   }
@@ -64,8 +65,6 @@ function create2DArray(cols, rows){
 }
 
 
-
-
 function formGroups (group, player) {
 
   groups[player].push(group);
@@ -73,7 +72,7 @@ function formGroups (group, player) {
 
   for (let i = 0; i < groups[player].length - 1; i++) {
     for (let j = 0; j < groups[player][i].stones.length; j++) {
-      if( (abs(groups[player][i].stones[j].x - vector.x) == 1) && ((groups[player][i].stones[j].y - vector.y) == 0 ) || (abs(groups[player][i].stones[j].y - vector.y) == 1 ) && ((groups[player][i].stones[j].x - vector.x) == 0 ) ) {
+      if((((abs(groups[player][i].stones[j].x - vector.x) == 1) && ((groups[player][i].stones[j].y - vector.y) == 0 )) || ((abs(groups[player][i].stones[j].y - vector.y) == 1 ) && ((groups[player][i].stones[j].x - vector.x) == 0 )))) {
         let newGroup = new Group(concat(groups[player][i].stones, group.stones));
         groups[player].splice(i, 1);
         groups[player].pop();
@@ -82,7 +81,6 @@ function formGroups (group, player) {
     }
   }
 }
-
 
 
 function mouseClicked () {
@@ -94,14 +92,13 @@ function mouseClicked () {
 
     //Check if field is empty
     if (grid[mousePos.x][mousePos.y] == null) {
+
+      let groupsTemp = groups;
+      let validMove = true;
+
       grid[mousePos.x][mousePos.y] = player;
       let newGroup = new Group([{x: mousePos.x, y : mousePos.y}]);
       formGroups(newGroup, player);
-
-      console.log(groups[player][groups[player].length - 1]);
-
-
-
 
       for (var i = 0; i < whiteGroups.length; i++) {
         whiteGroups[i].calcLiberties();
@@ -114,11 +111,78 @@ function mouseClicked () {
       }
 
 
-      // if (validMove() {
-      //
-      // }
-      //Other players' player
-      player = switchPlayer(player);
+      //Check if liberties of new Group are 0
+      //console.log(groups[player][groups[player].length - 1].liberties.length);
+      if (groups[player][groups[player].length - 1].liberties.length == 0) {
+        let killCount = 0;
+
+        //Check if liberties in any group of other player are 0
+        //Loop backwards to avoid skipping over indices because of using splice()
+        for (var i = groups[switchPlayer(player)].length - 1; i >= 0 ; i--) {
+          console.log(i);
+          console.log(groups[switchPlayer(player)][i].liberties);
+          if (groups[switchPlayer(player)][i].liberties.length == 0) {
+            //If they are, increment killCount
+            killCount++;
+
+            //Reset grid for that group
+            for (var j = 0; j < groups[switchPlayer(player)][i].stones.length; j++) {
+
+              grid[groups[switchPlayer(player)][i].stones[j].x][groups[switchPlayer(player)][i].stones[j].y] = null;
+            }
+
+            //Remove that group from groups
+            groups[switchPlayer(player)].splice(i, 1);
+          }
+        }
+
+        //Check if no groups have been killed, if so the move was not valid
+        if (killCount == 0) {
+          validMove = false;
+        }
+
+        //Otherwise calculate Liberties of other player
+        else {
+          for (var i = 0; i < groups[player].length; i++) {
+            groups[player][i].calcLiberties();
+          }
+        }
+
+      }
+
+      else {
+        //Check if liberties in any group of other player are 0
+        //Loop backwards to avoid skipping over indices because of using splice()
+        if (groups[switchPlayer(player)].length) {
+          for (var i = groups[switchPlayer(player)].length - 1; i >= 0 ; i--) {
+            if (groups[switchPlayer(player)][i].liberties.length == 0) {
+              //Reset grid for that group
+              for (var j = 0; j < groups[switchPlayer(player)][i].stones.length; j++) {
+                grid[groups[switchPlayer(player)][i].stones[j].x][groups[switchPlayer(player)][i].stones[j].y] = null;
+              }
+
+              //Remove that group from groups
+              groups[switchPlayer(player)].splice(i, 1);
+            }
+          }
+        }
+
+        for (var i = 0; i < groups[player].length; i++) {
+          groups[player][i].calcLiberties();
+        }
+      }
+
+
+      //If the move was valid, other players' move
+      if (validMove) {
+        player = switchPlayer(player);
+      }
+
+      //Else, reset state of game before the move
+      else {
+        groups = groupsTemp;
+        grid[mousePos.x][mousePos.y] = null;
+      }
     }
   }
 }
