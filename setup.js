@@ -101,7 +101,6 @@ function formGroups (group, player) {
 function mouseClicked () {
   //Determine Mouse Position
   mousePos = {x: (round(map(mouseX, 0, width, -0.5, 8.5))), y: (round(map(mouseY, 0, height, -0.5, 8.5)))};
-  console.log(mousePos);
 
   //Check if Mouse is on the Playing Field
   if (mousePos.x >= 0 && mousePos.x <= 8 && mousePos.y >= 0 && mousePos.y <= 8){
@@ -118,35 +117,26 @@ function mouseClicked () {
 
       for (var i = 0; i < whiteGroups.length; i++) {
         whiteGroups[i].calcLiberties();
-        //console.log("white group " + (i+1) + ": " + whiteGroups[i].liberties.length + " liberties");
       }
 
       for (var i = 0; i < blackGroups.length; i++) {
         blackGroups[i].calcLiberties();
-        //console.log("black group " + (i+1) + ": " + blackGroups[i].liberties.length + " liberties");
       }
 
 
       //Check if liberties of new Group are 0
-      //console.log(groups[player][groups[player].length - 1].liberties.length);
       if (groups[player][groups[player].length - 1].liberties.length == 0) {
         let killCount = 0;
 
         //Check if liberties in any group of other player are 0
-        //Loop backwards to avoid skipping over indices because of using splice()
         for (var i = groups[switchPlayer(player)].length - 1; i >= 0 ; i--) {
-          console.log(i);
-          console.log(groups[switchPlayer(player)][i].liberties);
+          //If they are, increment killCount
           if (groups[switchPlayer(player)][i].liberties.length == 0) {
-            //If they are, increment killCount
             killCount++;
-
             //Reset grid for that group
             for (var j = 0; j < groups[switchPlayer(player)][i].stones.length; j++) {
-
               grid[groups[switchPlayer(player)][i].stones[j].x][groups[switchPlayer(player)][i].stones[j].y] = null;
             }
-
             //Remove that group from groups
             groups[switchPlayer(player)].splice(i, 1);
           }
@@ -168,7 +158,6 @@ function mouseClicked () {
 
       else {
         //Check if liberties in any group of other player are 0
-        //Loop backwards to avoid skipping over indices because of using splice()
         if (groups[switchPlayer(player)].length) {
           for (var i = groups[switchPlayer(player)].length - 1; i >= 0 ; i--) {
             if (groups[switchPlayer(player)][i].liberties.length == 0) {
