@@ -36,6 +36,21 @@ function setup() {
 function draw() {
   background(94, 253, 173);
 
+  //Draw Lines
+  for (var i = 0; i < cols + 1; i++) {
+    let x = i*resolution-resolution/2;
+    stroke(0);
+    line(x, 0, x, height);
+  }
+
+  for (var i = 0; i < rows + 1; i++) {
+    let y = i*resolution-resolution/2;
+    stroke(0);
+    line(0, y, width, y);
+  }
+
+
+  //Draw Stones
   for (var i = 0; i < cols; i++) {
     for (var j = 0; j < rows; j++) {
       let x = i*resolution;
