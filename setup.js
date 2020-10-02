@@ -85,7 +85,8 @@ function formGroups (group, player) {
 
 function mouseClicked () {
   //Determine Mouse Position
-  mousePos = {x: abs(round(map(mouseX, 0, width, -0.5, 8.5))), y: abs(round(map(mouseY, 0, height, -0.5, 8.5)))};
+  mousePos = {x: (round(map(mouseX, 0, width, -0.5, 8.5))), y: (round(map(mouseY, 0, height, -0.5, 8.5)))};
+  console.log(mousePos);
 
   //Check if Mouse is on the Playing Field
   if (mousePos.x >= 0 && mousePos.x <= 8 && mousePos.y >= 0 && mousePos.y <= 8){
