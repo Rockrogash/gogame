@@ -20,7 +20,6 @@ function Group(stones){
             var index = this.liberties.findIndex(liberty => (liberty.x == (stone.x + neighbor.x)) && (liberty.y == (stone.y + neighbor.y)));
             if (index != -1) {
               this.liberties.splice(index, 1);
-
             }
           }
         }

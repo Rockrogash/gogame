@@ -12,18 +12,21 @@ let group;
 
 let mousePos;
 let player;
+let size;
 
 const Players = {WHITE:0, BLACK:1};
 const neighbors = [{x: 0, y: -1}, {x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}];
+const fieldSizes = {SMALL: 9, MIDDLE: 13, BIG: 19};
 
 
 function setup() {
 
-
+  size = fieldSizes.MIDDLE;
+  console.log(size);
   createCanvas(900,900);
-  resolution = 100;
-  cols = width/resolution;
-  rows = height/resolution;
+  resolution = width/size;
+  cols = size;
+  rows = size;
   grid = create2DArray(cols, rows);
   player = Players.WHITE;
   whiteGroups = [];
@@ -40,13 +43,13 @@ function draw() {
   for (var i = 0; i < cols + 1; i++) {
     let x = i*resolution-resolution/2;
     stroke(0);
-    line(x, 0, x, height);
+    line(x, resolution/2, x, height-resolution/2);
   }
 
   for (var i = 0; i < rows + 1; i++) {
     let y = i*resolution-resolution/2;
     stroke(0);
-    line(0, y, width, y);
+    line(resolution/2, y, width-resolution/2, y);
   }
 
 
@@ -100,21 +103,22 @@ function formGroups (group, player) {
 
 function mouseClicked () {
   //Determine Mouse Position
-  mousePos = {x: (round(map(mouseX, 0, width, -0.5, 8.5))), y: (round(map(mouseY, 0, height, -0.5, 8.5)))};
-
-  //Check if Mouse is on the Playing Field
-  if (mousePos.x >= 0 && mousePos.x <= 8 && mousePos.y >= 0 && mousePos.y <= 8){
-
+  mousePos = {x: (round(map(mouseX, 0, width, -0.5, size - 0.5))), y: (round(map(mouseY, 0, height, -0.5, size - 0.5)))};
+  //Check if Mouse is on the grid
+  if (mousePos.x >= 0 && mousePos.x <= (size - 1) && mousePos.y >= 0 && mousePos.y <= (size - 1)){
     //Check if field is empty
     if (grid[mousePos.x][mousePos.y] == null) {
 
       let groupsTemp = groups;
       let validMove = true;
 
+      //Place stone and form groups
       grid[mousePos.x][mousePos.y] = player;
       let newGroup = new Group([{x: mousePos.x, y : mousePos.y}]);
       formGroups(newGroup, player);
 
+
+      //Calculate liberties of all groups
       for (var i = 0; i < whiteGroups.length; i++) {
         whiteGroups[i].calcLiberties();
       }
@@ -201,5 +205,5 @@ function switchPlayer (player) {
 
 
 function inBounds (i, j, stone) {
-  return (((-1 < (stone.x + i)) && ((stone.x + i) < 9)) && ((-1 < (stone.y + j)) && ((stone.y + j) < 9)));
+  return (((-1 < (stone.x + i)) && ((stone.x + i) < size)) && ((-1 < (stone.y + j)) && ((stone.y + j) < size)));
 }
