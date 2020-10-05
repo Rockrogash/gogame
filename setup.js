@@ -6,6 +6,7 @@ let rows;
 let whiteGroups;
 let blackGroups;
 
+let moves;
 let groups;
 let groupsTemp;
 let group;
@@ -30,6 +31,7 @@ function setup() {
   rows = size;
   grid = create2DArray(cols, rows);
   player = Players.WHITE;
+  moves = [];
   whiteGroups = [];
   blackGroups = [];
   groups = [whiteGroups, blackGroups];
@@ -79,6 +81,11 @@ function create2DArray(cols, rows){
   let arr = new Array(cols);
   for (var i = 0; i < arr.length; i++) {
     arr[i] = new Array(rows);
+
+    for (var j = 0; j < arr[i].length; j++) {
+      arr[i][j] = null;
+    }
+
   }
   return arr;
 }
@@ -184,9 +191,17 @@ function mouseClicked () {
         }
       }
 
+      //Ko' Rule (Same move cannot be done twice in a row)
+      if (moves.length > 2){
+        if (_.isEqual(grid, moves[moves.length-2][1])) {
+          validMove = false;
+        }
+      }
 
-      //If the move was valid, other players' move
+      //If the move was valid, save move in moves and switch player
       if (validMove) {
+        let move = [_.cloneDeep(groups), _.cloneDeep(grid)];
+        moves.push(move);
         player = switchPlayer(player);
       }
 
