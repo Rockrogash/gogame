@@ -7,7 +7,7 @@ let whiteGroups;
 let blackGroups;
 
 let groups;
-let groupsTemp
+let groupsTemp;
 let group;
 
 let mousePos;
@@ -21,9 +21,10 @@ const fieldSizes = {SMALL: 9, MIDDLE: 13, BIG: 19};
 
 function setup() {
 
-  size = fieldSizes.MIDDLE;
-  console.log(size);
+  size = fieldSizes.SMALL;
   createCanvas(900,900);
+
+  //img = loadImage("/assets/background_coffeestain.jpeg");
   resolution = width/size;
   cols = size;
   rows = size;
@@ -109,7 +110,9 @@ function mouseClicked () {
     //Check if field is empty
     if (grid[mousePos.x][mousePos.y] == null) {
 
-      let groupsTemp = groups;
+      groupsTemp = _.cloneDeep(groups);
+      gridTemp = _.cloneDeep(grid);
+
       let validMove = true;
 
       //Place stone and form groups
@@ -119,12 +122,12 @@ function mouseClicked () {
 
 
       //Calculate liberties of all groups
-      for (var i = 0; i < whiteGroups.length; i++) {
-        whiteGroups[i].calcLiberties();
+      for (var i = 0; i < groups[0].length; i++) {
+        groups[0][i].calcLiberties();
       }
 
-      for (var i = 0; i < blackGroups.length; i++) {
-        blackGroups[i].calcLiberties();
+      for (var i = 0; i < groups[1].length; i++) {
+        groups[1][i].calcLiberties();
       }
 
 
@@ -189,8 +192,8 @@ function mouseClicked () {
 
       //Else, reset state of game before the move
       else {
-        groups = groupsTemp;
-        grid[mousePos.x][mousePos.y] = null;
+        groups = _.cloneDeep(groupsTemp);
+        grid = _.cloneDeep(gridTemp);
       }
     }
   }
