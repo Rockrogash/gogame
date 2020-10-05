@@ -26,7 +26,8 @@ function setup() {
   size = fieldSizes.SMALL;
   createCanvas(900,900);
 
-  //img = loadImage("/assets/background_coffeestain.jpeg");
+  //img1 = loadImage("/assets/background_coffeestain.jpeg");
+  img = loadImage('https://images.unsplash.com/photo-1525034687081-c702010cb70d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80');
   resolution = width/size;
   cols = size;
   rows = size;
@@ -42,7 +43,8 @@ function setup() {
 
 
 function draw() {
-  background(94, 253, 173);
+  //background(94, 253, 173);
+  background(img);
 
   //Draw Lines
   for (var i = 0; i < cols + 1; i++) {
