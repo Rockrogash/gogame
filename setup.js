@@ -14,6 +14,7 @@ let group;
 let mousePos;
 let player;
 let size;
+let messages;
 
 const Players = {WHITE:0, BLACK:1};
 const neighbors = [{x: 0, y: -1}, {x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}];
@@ -35,6 +36,7 @@ function setup() {
   whiteGroups = [];
   blackGroups = [];
   groups = [whiteGroups, blackGroups];
+  messages = [];
 }
 
 
@@ -71,6 +73,14 @@ function draw() {
         fill(231, 238, 236);
         circle(x+(resolution/2), y+(resolution/2), resolution*0.9);
       }
+    }
+  }
+
+  //Show Messages
+  for (var i = messages.length - 1; i >= 0; i--) {
+    messages[i].show();
+    if (messages[i].duration >= 300) {
+      messages.splice(i, 1);
     }
   }
 
@@ -205,8 +215,10 @@ function mouseClicked () {
         player = switchPlayer(player);
       }
 
-      //Else, reset state of game before the move
+      //Else, create Error Message and reset state of game before the move
       else {
+        let message = new Message('Move not allowed!');
+        messages.push(message);
         groups = _.cloneDeep(groupsTemp);
         grid = _.cloneDeep(gridTemp);
       }
