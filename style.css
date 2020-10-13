@@ -3,4 +3,24 @@ body {
   background-color: #60AB9A;
 }
 canvas {
+
+}
+
+#menu-bar {
+  padding-top: 10px;
+}
+
+#undo {
+  padding: 10px 50px 10px 50px;
+}
+
+.game-container {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+}
+
+#canvas-container {
+  display: inline-block;
 }
