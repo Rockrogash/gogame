@@ -7,7 +7,8 @@ function Message(message){
 
   this.show = function(){
     fill(255, 0, 0, fade);
-    textSize(50);
+    textSize(80);
+    textFont('jsa_lovechinese');
     textAlign(CENTER, CENTER);
     text(this.message, width/2, -50 + height/2 + yOffset);
     fade -= 1;

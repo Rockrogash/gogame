@@ -18,14 +18,22 @@ const Players = {WHITE:0, BLACK:1};
 const neighbors = [{x: 0, y: -1}, {x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}];
 const fieldSizes = {SMALL: 9, MIDDLE: 13, BIG: 19};
 
-var hallo = $('canvas-container');
-
 
 function setup() {
 
-  size = fieldSizes.SMALL;
-  canvas = createCanvas(800,800);
+  size = fieldSizes.BIG;
+
+  //Setting up HTML containers, eventListeners and canvas size
+  let canvasWidth = floor(parseInt($('#game-container').css('max-width')) * 8/12);
+  let barWidth = (canvasWidth * 0.25);
+  $('.bar').css('width', barWidth);
+  canvas = createCanvas(canvasWidth,canvasWidth);
   canvas.parent('canvas-container');
+  $('#canvas-container').css('height', height);
+  $('#skip').click(function(){
+    player = switchPlayer(player);
+  });
+
 
   //img1 = loadImage("/assets/background_coffeestain.jpeg");
   img = loadImage('https://images.unsplash.com/photo-1525034687081-c702010cb70d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80');
@@ -36,7 +44,6 @@ function setup() {
   player = Players.WHITE;
   moves = [];
   groups = [new Array(), new Array()];
-  console.log(groups);
   messages = [];
 }
 
@@ -222,9 +229,10 @@ function mouseClicked () {
 
       //Undo Button Logic
       if (moves.length == 1) {
-          $('#menu-bar').append('<button id="undo">UNDO</button>');
-          $('#undo').click(function(){undo();});
-          // listenToUndo();
+          $('#undo').addClass('active');
+          $('#undo.active').click(function(){undo();});
+          let x = $('#undo.active');
+          console.log(x);
         }
 
         player = switchPlayer(player);
@@ -232,7 +240,7 @@ function mouseClicked () {
 
       //Else, create Error Message and reset state of game before the move
       else {
-        let message = new Message('Move not allowed!');
+        let message = new Message('move not allowed!');
         messages.push(message);
         groups = _.cloneDeep(groupsTemp);
         grid = _.cloneDeep(gridTemp);
@@ -254,19 +262,18 @@ function inBounds (i, j, stone) {
 // *** Buttons *** //
 
 function undo () {
-
   if (moves.length > 1){
     grid = _.cloneDeep(moves[moves.length - 2].grid);
     groups = _.cloneDeep(moves[moves.length - 2].groups);
     moves.pop();
   }
-
   else {
     grid = create2DArray(cols, rows);
     groups = [new Array(), new Array()];
     moves.pop();
-    $('#undo').remove();
-  }
+    $('#undo.active').unbind();
+    $('#undo').removeClass('active');
 
+  }
   player = switchPlayer(player);
 }

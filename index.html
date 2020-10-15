@@ -2,21 +2,45 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>GO</title>
     <script src="libraries/p5.js" charset="utf-8"></script>
     <script src="libraries/lodash.js" charset="utf-8"></script>
     <script src="libraries/jquery-3.5.1.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <script src="go.js" charset="utf-8"></script>
     <script src="group.js" charset="utf-8"></script>
     <script src="message.js" charset="utf-8"></script>
-    <div id="game-container">
-      <div id="canvas-container">
-      </div>
-      <div id="menu-bar">
+    <div class="container" id="game-container">
+        <div class="bar">
+          <div class="bar-inner">
+            <div class="bar-content">
+            <span>Player 1</span>
+            <img class="bird-image" id="bird-left" src="assets/images/bird5.png">
+            </div>
+          </div>
+        </div>
+        <div class="" id="canvas-container">
+        </div>
+        <div class="bar" >
+          <div class="bar-inner">
+            <div class="bar-content" id="menu-bar">
+              <button class="bar-button" id="undo">undo</button>
+              <div class="chinese-text">撤</br>消</div>
+              <button class="bar-button" id="skip">skip</button>
+              <div class="chinese-text">跳</br>跃</div>
+              <button class="bar-button" id="yield">yield</button>
+              <div class="chinese-text">放</br>棄</div>
+              <img class="bird-image" id="bird-right" src="assets/images/bird2.png">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+  <a class="site-link" href="credits.html">credits</a>
   </body>
+
 </html>
