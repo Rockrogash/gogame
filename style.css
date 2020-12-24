@@ -4,6 +4,12 @@
          url('assets/fonts/jsa_lovechinese.woff') format('woff');
 }
 
+@font-face {
+    font-family: 'lastninja';
+    src: url('assets/fonts/lastninja.ttf') format('truetype'),
+         url('assets/fonts/lastninja.woff') format('woff');
+}
+
 
 
 body {
@@ -100,7 +106,7 @@ body {
 
 .chinese-text {
   color: white;
-  font-size: 0.8em;
+  font-size: 22px;
   user-select: none;
 }
 
@@ -125,6 +131,38 @@ body {
   bottom: -3px;
 }
 
+#score-bar {
+  color: white;
+  font-family: 'lastninja';
+
+}
+
+.score-heading {
+  font-size: 22px;
+  display: inline-block;
+  margin: 15px 0px;
+}
+
+.score-banner {
+  position: relative;
+  margin-top: 15px;
+  padding: 10px 5px;
+  display: inline-block;
+  height: 100px;
+  width: 50px;
+  background-color: black;
+}
+
+.bar-content .score-banner:after {
+  content: '';
+  width: 30px;
+  height: 30px;
+  background: radial-gradient(circle, rgba(220, 51, 63,1) 0%, rgba(200, 51, 63,0.8) 30%, rgba(167, 51, 63,0.05) 70%,  rgba(199, 51, 63,0) 100%);
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  border-radius: 50%;
+}
 /* Credits */
 
 
